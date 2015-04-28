@@ -36,7 +36,7 @@ class Custom_Sidebars {
 	 */
 	public function admin_init() {
 
-		if( ! $pages = wp_cache_get( 'posts', 'custom_sidebars' ) ) {
+		if( ! $posts = wp_cache_get( 'posts', 'custom_sidebars' ) ) {
 			$args       = array(
 				'post_type' => apply_filters( 'custom_sidebar_post_types', array_values( get_post_types() ) ),
 			);
