@@ -26,6 +26,7 @@ class Custom_Sidebars {
 	public function __construct() {
 
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_action( 'custom_sidebar', array( $this, 'custom_sidebar' ) );
 
 	}
 
@@ -65,6 +66,12 @@ class Custom_Sidebars {
 			register_sidebar( $args );
 		}
 
+	}
+
+	public function custom_sidebar() {
+
+		echo 'Custom sidebar here';
+	
 	}
 	
 }
