@@ -1,0 +1,18 @@
+{
+	"name": "clubduece/custom-sidebars",
+	"type": "wp-muplugin",
+	"description": "A plugin to manage custom sidebars for posts and pages",
+	"keywords": ["wordpress","mvc","plugins"],
+	"homepage": "https://github.com/clubduece/custom-sidebars",
+	"license": "GPLv2.0",
+	"authors": [
+		{
+			"name": "ClubDuece",
+			"email": "daryl@clubduece.com",
+			"role": "Developer"
+    	}
+	],
+	"require": {
+		"php": ">=5.2"
+	}
+}
