@@ -25,7 +25,7 @@ class Custom_Sidebars {
 	 */
 	public function __construct() {
 
-		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'custom_sidebar', array( $this, 'custom_sidebar' ) );
 
 	}
@@ -35,7 +35,7 @@ class Custom_Sidebars {
 	 *
 	 * Get all pages and posts and add sidebars for each individual post
 	 */
-	public function admin_init() {
+	public function init() {
 
 		$posts = array();
 
@@ -54,25 +54,49 @@ class Custom_Sidebars {
 		}
 
 		foreach( $posts as $post ) {
-			$args = array(
+			$args = apply_filters( 'custom_sidebar_args', array(
 				'name'          => sprintf( __( 'Sidebar: %s', 'custom_sidebars' ), $post->post_title ),
-				'id'            => "sidebar-{$post->post_name}",
+				'id'            => $this->get_sidebar_id( $post->ID ),
 				'description'   => sprintf( __( 'This sidebar will appear on the %s single page.', 'cd-sidebar' ), $post->post_title ),
 				'class'         => '',
-				'before_widget' => '<li id="%1$s" class="widget %2$s">',
-				'after_widget'  => '</li>',
-				'before_title'  => '<h2 class="widgettitle">',
-				'after_title'   => '</h2>'
-			);
+				'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+				'after_widget'  => '</aside>',
+				'before_title'  => '<h2 class="widget-title">',
+				'after_title'   => '</h2>',
+			) );
 
 			register_sidebar( $args );
 		}
 
 	}
 
+	/**
+	 * Render the sidebar
+	 *
+	 * This method is hooked to the custom_sidebar action
+	 */
 	public function custom_sidebar() {
 
-		echo 'Custom sidebar here';
+		$post = get_post();
+		$sidebar = $this->get_sidebar_id( $post->ID );
+
+		if ( is_active_sidebar( $sidebar ) ) {
+			dynamic_sidebar( $sidebar );
+		}
+
+	}
+
+	/**
+	 * Get the sidebar id for a specific post
+	 *
+	 * @param  int|null The WP post id
+	 * @return string   The sidebar id
+	 */
+	public function get_sidebar_id( $post_id = null ) {
+
+		$post = get_post( $post_id );
+
+		return "sidebar-{$post->ID}";
 
 	}
 	
