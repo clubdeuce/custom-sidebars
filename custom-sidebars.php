@@ -17,5 +17,4 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require_once( 'includes/class-custom-sidebars.php' );
 
-global $Custom_Sidebars;
 $Custom_Sidebars = new Custom_Sidebars();
