@@ -46,14 +46,14 @@ class Custom_Sidebars {
 
 			$query = new WP_Query( $args );
 
-			if( $query->have_posts() ) {
+			if ( $query->have_posts() ) {
 				$posts = $query->posts;
 			}
 
 			wp_cache_set( 'posts', 'custom_sidebars' );
 		}
 
-		foreach( $posts as $post ) {
+		foreach ( $posts as $post ) {
 			$args = apply_filters( 'custom_sidebar_args', array(
 				'name'          => sprintf( __( 'Sidebar: %s', 'custom_sidebars' ), $post->post_title ),
 				'id'            => $this->get_sidebar_id( $post->ID ),
