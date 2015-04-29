@@ -39,7 +39,7 @@ class Custom_Sidebars {
 
 		$posts = array();
 
-		if( ! $posts = wp_cache_get( 'posts', 'custom_sidebars' ) ) {
+		if ( ! $posts = wp_cache_get( 'posts', 'custom_sidebars' ) ) {
 			$args = array(
 				'post_type' => apply_filters( 'custom_sidebar_post_types', array_values( get_post_types() ) ),
 			);
@@ -58,7 +58,7 @@ class Custom_Sidebars {
 				'name'          => sprintf( __( 'Sidebar: %s', 'custom_sidebars' ), $post->post_title ),
 				'id'            => "sidebar-{$post->post_name}",
 				'description'   => sprintf( __( 'This sidebar will appear on the %s single page.', 'cd-sidebar' ), $post->post_title ),
-			    'class'         => '',
+				'class'         => '',
 				'before_widget' => '<li id="%1$s" class="widget %2$s">',
 				'after_widget'  => '</li>',
 				'before_title'  => '<h2 class="widgettitle">',
