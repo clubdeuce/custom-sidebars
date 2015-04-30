@@ -15,15 +15,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-require_once( 'includes/class-custom-sidebars.php' );
-require_once 'includes/class-sidebar-details.php';
+/**
+ * The custom sidebar details metabox
+ *
+ * @var Custom_Sidebars_Details $metabox
+ */
+?>
+<label for="custom-sidebar-select"><?php _e( 'Use the following sidebar for this page:', 'custom-sidebars' ); ?></label>
+<select name="custom-sidebar-select">
+	<option value="none"><?php /* translators: as in 'No sidebar' */ _e( 'None', 'custom-sidebars' ); ?></option>
+	<?php $metabox->sidebar_select_options(); ?>
+</select>
 
-$Custom_Sidebars = new Custom_Sidebars();
-
-add_action( 'admin_init', 'custom_sidebars_admin_init' );
-
-function custom_sidebars_admin_init() {
-
-	$custom_sidebar_details = new Custom_Sidebars_Details();
-
-}

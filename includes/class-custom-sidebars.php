@@ -21,6 +21,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class Custom_Sidebars {
 
 	/**
+	 * The default sidebar id
+	 *
+	 * @var    string
+	 * @access private
+	 * @static
+	 */
+	private static $default_sidebar_id;
+
+	/**
 	 * The class constructor
 	 */
 	public function __construct() {
@@ -41,7 +50,7 @@ class Custom_Sidebars {
 
 		if ( ! $posts = wp_cache_get( 'posts', 'custom_sidebars' ) ) {
 			$args = array(
-				'post_type' => apply_filters( 'custom_sidebar_post_types', array_values( get_post_types() ) ),
+				'post_type' => Custom_Sidebars::get_post_types(),
 			);
 
 			$query = new WP_Query( $args );
@@ -78,7 +87,7 @@ class Custom_Sidebars {
 	public function custom_sidebar() {
 
 		$post = get_post();
-		$sidebar = $this->get_sidebar_id( $post->ID );
+		$sidebar = $this->get_sidebar( $post->ID );
 
 		if ( is_active_sidebar( $sidebar ) ) {
 			dynamic_sidebar( $sidebar );
@@ -96,8 +105,36 @@ class Custom_Sidebars {
 
 		$post = get_post( $post_id );
 
-		return "sidebar-{$post->ID}";
+		return "custom-sidebar-{$post->ID}";
+
+	}
+
+	public static function get_post_types() {
+
+		return apply_filters( 'custom_sidebar_post_types', array_values( get_post_types() )	);
+
+	}
+
+	public static function get_sidebar( $post_id = null ) {
+
+		if ( empty( $post_id ) ) {
+			$post_id = get_post()->ID;
+		}
+
+		$sidebar = get_post_meta( $post_id, 'custom-sidebar-id', true );
+
+		if ( $sidebar == false && isset( self::$default_sidebar_id ) ) {
+			$sidebar = self::$default_sidebar_id;
+		}
+
+		return $sidebar;
 
 	}
 	
+	public static function register_default_sidebar( $sidebar_id ) {
+
+		self::$default_sidebar_id = $sidebar_id;
+
+	}
+
 }
