@@ -20,10 +20,3 @@ require_once 'includes/class-sidebar-details.php';
 
 $Custom_Sidebars = new Custom_Sidebars();
 
-add_action( 'admin_init', 'custom_sidebars_admin_init' );
-
-function custom_sidebars_admin_init() {
-
-	$custom_sidebar_details = new Custom_Sidebars_Details();
-
-}

@@ -21,6 +21,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class Custom_Sidebars {
 
 	/**
+	 * @var Custom_Sidebar_Details
+	 */
+	private $custom_sidebar_details;
+
+	/**
 	 * The default sidebar id
 	 *
 	 * @var    string
@@ -36,6 +41,13 @@ class Custom_Sidebars {
 
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'custom_sidebar', array( $this, 'custom_sidebar' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
+
+	}
+
+	public function admin_init() {
+
+		$this->custom_sidebar_details = new Custom_Sidebars_Details();
 
 	}
 
@@ -63,18 +75,22 @@ class Custom_Sidebars {
 		}
 
 		foreach ( $posts as $post ) {
-			$args = apply_filters( 'custom_sidebar_args', array(
-				'name'          => sprintf( __( 'Sidebar: %s', 'custom_sidebars' ), $post->post_title ),
-				'id'            => $this->get_sidebar_id( $post->ID ),
-				'description'   => sprintf( __( 'This sidebar will appear on the %s single page.', 'cd-sidebar' ), $post->post_title ),
-				'class'         => '',
-				'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-				'after_widget'  => '</aside>',
-				'before_title'  => '<h2 class="widget-title">',
-				'after_title'   => '</h2>',
-			) );
 
-			register_sidebar( $args );
+			if ( Custom_Sidebars_Details::has_custom_sidebar( $post->ID ) ) {
+				$args = apply_filters( 'custom_sidebar_args', array(
+					'name'          => sprintf( __( 'Sidebar: %s', 'custom_sidebars' ), $post->post_title ),
+					'id'            => $this->get_sidebar_id( $post->ID ),
+					'description'   => sprintf( __( 'This sidebar will appear on the %s single page.', 'cd-sidebar' ), $post->post_title ),
+					'class'         => '',
+					'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+					'after_widget'  => '</aside>',
+					'before_title'  => '<h2 class="widget-title">',
+					'after_title'   => '</h2>',
+				) );
+
+				register_sidebar( $args );
+			}
+
 		}
 
 	}
@@ -121,7 +137,7 @@ class Custom_Sidebars {
 			$post_id = get_post()->ID;
 		}
 
-		$sidebar = get_post_meta( $post_id, 'custom-sidebar-id', true );
+		$sidebar = get_post_meta( $post_id, '_custom_sidebar_id', true );
 
 		if ( $sidebar == false && isset( self::$default_sidebar_id ) ) {
 			$sidebar = self::$default_sidebar_id;
