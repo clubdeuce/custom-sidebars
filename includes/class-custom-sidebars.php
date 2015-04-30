@@ -45,6 +45,11 @@ class Custom_Sidebars {
 
 	}
 
+	/**
+	 * Instantiate the custom sidebars metabox class
+	 *
+	 * This method is hooked to the WP admin_init action
+	 */
 	public function admin_init() {
 
 		$this->custom_sidebar_details = new Custom_Sidebars_Details();
@@ -125,12 +130,18 @@ class Custom_Sidebars {
 
 	}
 
+	/**
+	 * Get the post types for which custom sidebars should be registered
+	 */
 	public static function get_post_types() {
 
 		return apply_filters( 'custom_sidebar_post_types', array_values( get_post_types() )	);
 
 	}
 
+	/**
+	 * Get the sidebar_id assigned to a specific post
+	 */
 	public static function get_sidebar( $post_id = null ) {
 
 		if ( empty( $post_id ) ) {
@@ -147,6 +158,9 @@ class Custom_Sidebars {
 
 	}
 	
+	/**
+	 * Register a default sidebar to use when a post has not a specific sidebar assigned
+	 */
 	public static function register_default_sidebar( $sidebar_id ) {
 
 		self::$default_sidebar_id = $sidebar_id;
