@@ -69,7 +69,7 @@ class Custom_Sidebars {
 			$args = array(
 				'post_type' => Custom_Sidebars::get_post_types(),
 				'meta_query' => array(
-					array (
+					array(
 						'key'   => '_custom_sidebar',
 						'value' => true,
 					)
@@ -137,7 +137,7 @@ class Custom_Sidebars {
 	 */
 	public static function get_post_types() {
 
-		return apply_filters( 'custom_sidebar_post_types', array_values( get_post_types() )	);
+		return apply_filters( 'custom_sidebar_post_types', array_values( get_post_types() ) );
 
 	}
 
