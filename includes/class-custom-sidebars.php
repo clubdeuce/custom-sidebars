@@ -40,8 +40,8 @@ class Custom_Sidebars {
 	public function __construct() {
 
 		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'custom_sidebar', array( $this, 'custom_sidebar' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_filter( 'sidebars_widgets', array( $this, 'sidebars_widgets' ) );
 
 	}
 
@@ -103,22 +103,6 @@ class Custom_Sidebars {
 	}
 
 	/**
-	 * Render the sidebar
-	 *
-	 * This method is hooked to the custom_sidebar action
-	 */
-	public function custom_sidebar() {
-
-		$post = get_post();
-		$sidebar = $this->get_sidebar( $post->ID );
-
-		if ( is_active_sidebar( $sidebar ) ) {
-			dynamic_sidebar( $sidebar );
-		}
-
-	}
-
-	/**
 	 * Get the sidebar id for a specific post
 	 *
 	 * @param  int|null The WP post id
@@ -161,11 +145,38 @@ class Custom_Sidebars {
 	}
 	
 	/**
-	 * Register a default sidebar to use when a post has not a specific sidebar assigned
+	 * Register a default sidebar to use when a post has no specific sidebar assigned
 	 */
 	public static function register_default_sidebar( $sidebar_id ) {
 
 		self::$default_sidebar_id = $sidebar_id;
+
+	}
+
+	/**
+	 * Filter the sidebar widgets
+	 *
+	 * This method is hooked to the WP filter sidebars_widgets. 
+	 *
+	 * Since we have no way to know what sidebar is currently being called, this method
+	 * replaces the array of widgets for ALL registered sidebars with the widgets
+	 * assigned to the sidebar specified for use on this particular post/page. This is a
+	 * carpet-bomb approach that should be more specific, but current limitiations in the
+	 * WP infrastructure require it to be done this way.
+	 *
+	 * @param  array $sidebar_widgets
+	 * @return array $sidebar_widgets The filtered widget array
+	 * @since  0.3
+	 */
+	public function sidebars_widgets( $sidebar_widgets ) {
+
+		if ( ! is_admin() && ! empty( $this->get_sidebar() ) ) {
+			foreach ( $sidebar_widgets as $key => $widgets ) {
+				$sidebar_widgets[ $key ] = $sidebar_widgets[ $this->get_sidebar() ];
+			}
+		}
+
+		return $sidebar_widgets;
 
 	}
 
