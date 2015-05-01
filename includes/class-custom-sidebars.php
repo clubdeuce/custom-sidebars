@@ -65,9 +65,15 @@ class Custom_Sidebars {
 
 		$posts = array();
 
-		if ( ! $posts = wp_cache_get( 'posts', 'custom_sidebars' ) ) {
+		if ( ! $posts = wp_cache_get( 'sidebars', 'custom_sidebars' ) ) {
 			$args = array(
 				'post_type' => Custom_Sidebars::get_post_types(),
+				'meta_query' => array(
+					array (
+						'key'   => '_custom_sidebar',
+						'value' => true,
+					)
+				)
 			);
 
 			$query = new WP_Query( $args );
@@ -76,26 +82,22 @@ class Custom_Sidebars {
 				$posts = $query->posts;
 			}
 
-			wp_cache_set( 'posts', 'custom_sidebars' );
+			wp_cache_set( 'sidebars', 'custom_sidebars' );
 		}
 
 		foreach ( $posts as $post ) {
+			$args = apply_filters( 'custom_sidebar_args', array(
+				'name'          => sprintf( __( 'Sidebar: %s', 'custom_sidebars' ), $post->post_title ),
+				'id'            => $this->get_sidebar_id( $post->ID ),
+				'description'   => sprintf( __( 'This sidebar will appear on the %s single page.', 'cd-sidebar' ), $post->post_title ),
+				'class'         => '',
+				'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+				'after_widget'  => '</aside>',
+				'before_title'  => '<h2 class="widget-title">',
+				'after_title'   => '</h2>',
+			) );
 
-			if ( Custom_Sidebars_Details::has_custom_sidebar( $post->ID ) ) {
-				$args = apply_filters( 'custom_sidebar_args', array(
-					'name'          => sprintf( __( 'Sidebar: %s', 'custom_sidebars' ), $post->post_title ),
-					'id'            => $this->get_sidebar_id( $post->ID ),
-					'description'   => sprintf( __( 'This sidebar will appear on the %s single page.', 'cd-sidebar' ), $post->post_title ),
-					'class'         => '',
-					'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-					'after_widget'  => '</aside>',
-					'before_title'  => '<h2 class="widget-title">',
-					'after_title'   => '</h2>',
-				) );
-
-				register_sidebar( $args );
-			}
-
+			register_sidebar( $args );
 		}
 
 	}
