@@ -15,6 +15,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/*
+Plugin Name: Custom Sidebars
+Plugin URI: http://github.com/clubduece/custom-sidebars
+Description: Allows users to create custom sidebars on a page/post basis.
+Version: 0.3
+Author: clubDuece
+Author URI: http://github.com/clubduece
+License: GPLv2 or later
+*/
 if ( ! defined( 'CUSTOM_SIDEBARS' ) ) {
 	define( 'CUSTOM_SIDEBARS', true );
 }
