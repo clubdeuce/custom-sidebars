@@ -15,7 +15,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-require_once 'includes/class-custom-sidebars.php';
-require_once 'includes/class-sidebar-details.php';
+if ( ! defined( 'CUSTOM_SIDEBARS' ) ) {
+	define( 'CUSTOM_SIDEBARS', true );
+}
 
-$Custom_Sidebars = new Custom_Sidebars();
+if ( CUSTOM_SIDEBARS ) {
+	require_once 'includes/class-custom-sidebars.php';
+	require_once 'includes/class-sidebar-details.php';
+
+	$Custom_Sidebars = new Custom_Sidebars();
+}
