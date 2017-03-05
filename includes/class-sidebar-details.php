@@ -66,19 +66,27 @@ class Custom_Sidebars_Details {
 
 	}
 
+    /**
+     * @param int $post_id
+     */
 	public function save_post( $post_id ) {
 
-		$sidebar_id = $_POST['custom-sidebar-select'];
+		$sidebar_id     = filter_input( INPUT_POST, 'custom-sidebar-select', FILTER_VALIDATE_INT );
+        $custom_sidebar = filter_input( INPUT_POST, 'custom-sidebar', FILTER_VALIDATE_BOOLEAN );
 
-		if ( isset( $_POST['custom-sidebar'] ) ) {
-			$sidebar_id = Custom_Sidebars::get_sidebar_id( $post_id );	
+		if ( isset( $custom_sidebar ) ) {
+			$sidebar_id = Custom_Sidebars::get_sidebar_id( $post_id );
 		}
 
-		update_post_meta( $post_id, '_custom_sidebar',   ( bool )$_POST['custom-sidebar'] );
+		update_post_meta( $post_id, '_custom_sidebar',    $custom_sidebar );
 		update_post_meta( $post_id, '_custom_sidebar_id', sanitize_text_field( $sidebar_id ) );
 
 	}
 
+    /**
+     * @param  int|null $post_id
+     * @return bool
+     */
 	public static function has_custom_sidebar( $post_id = null ) {
 
 		$value = false;
